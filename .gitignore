@@ -54,4 +54,5 @@ htmlcov/
 # Logs
 *.log
 logs/
+data/
 

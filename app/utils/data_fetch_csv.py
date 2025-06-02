@@ -26,13 +26,21 @@ csv_urls = {
     "bolt": "https://data.stad.gent/api/explore/v2.1/catalog/datasets/bolt-deelfietsen-gent/exports/csv?delimiter=%3B&list_separator=%2C&quote_all=false&with_bom=true"
 }
 
+
+json_urls = {
+    "dott": "https://data.stad.gent/api/explore/v2.1/catalog/datasets/dott-deelfietsen-gent/records?limit=100",
+    "bolt": "https://data.stad.gent/api/explore/v2.1/catalog/datasets/bolt-deelfietsen-gent/records?limit=100"
+}
+
+
 def log(msg: str):
     with open(log_file, "a") as file:
         file.write(f"{datetime.now(): %Y-%m-%d %H:%M:%S} : {msg}\n")
 
 def ensure_dir_exists():
-    for path in [bike_csv_path]:
+    for path in [bike_geojson_path, archive / "geojson"]:
         path.mkdir(parents=True, exist_ok=True)
+
 
 
 def check_if_file_is_recent(file_path, max_age):
@@ -42,9 +50,6 @@ def check_if_file_is_recent(file_path, max_age):
     return datetime.now() - file_timespamp < timedelta(minutes=max_age)
 
 def archive_old():
-    for file in bike_csv_path.glob("*.csv"):
-        shutil.move(file, archive / "csv" / file.name)
-    
     for file in bike_geojson_path.glob("*.geojson"):
         shutil.move(file, archive / "geojson" / file.name)
 
@@ -54,9 +59,9 @@ def fetch_data():
     ensure_dir_exists()
 
     recent = False
-    for name in csv_urls:
-        pattern = f"{name}_*.csv"
-        relevant_files = sorted(bike_csv_path.glob(pattern), reverse=True)
+    for name in json_urls:
+        pattern = f"{name}_*.geojson"
+        relevant_files = sorted(bike_geojson_path.glob(pattern), reverse=True)
         if relevant_files and check_if_file_is_recent(relevant_files[0], file_old_timeout_in_min):
             recent = True
 
@@ -66,15 +71,54 @@ def fetch_data():
     archive_old()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    for name, url in csv_urls.items():
-        file = f"{name}_{timestamp}.csv"
-        path = bike_csv_path / file
+    for name, url in json_urls.items():
+        filename = f"{name}_{timestamp}.geojson"
+        path = bike_geojson_path / filename
         r = requests.get(url)
         r.raise_for_status()
-        file.write_bytes(r.content)
+        data = r.json()
+        print(data)
+        make_GeoJson_from_JSON(data, path)
         os.chmod(path, 0o444)
-        log(f"{name.capitalize()} CSV saved to {path}")
-        make_GeoJson_from_CSV(file)
+        log(f"{name.capitalize()} GeoJSON saved to {path}")
+
+
+def make_GeoJson_from_JSON(api_response, output_path: Path):
+    features = []
+
+    for record in api_response.get("results", []):
+        loc = record.get("loc")
+        if not loc:
+            continue
+
+        try:
+            lat = float(loc["lat"])
+            lon = float(loc["lon"])
+            provider = record.get("vehicle_type_id", "unknown")
+            range_m = record.get("current_range_meters", None)
+
+            feature = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [lon, lat]
+                },
+                "properties": {
+                    "provider": provider,
+                    "range": range_m
+                }
+            }
+            features.append(feature)
+        except (KeyError, ValueError, TypeError):
+            continue
+
+    geojson_data = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(geojson_data, f, indent=4)
 
 
 # https://stackoverflow.com/questions/48586647/python-script-to-convert-csv-to-geojson
@@ -105,3 +149,22 @@ def make_GeoJson_from_CSV(csv_file_name: str):
     with open(new_json_path, 'w', encoding='utf-8') as file:
         file.write(json.dumps(geojson_data, sort_keys=False, indent=4))
 
+
+def get_bikes_from_API_data():
+    fetch_data()
+    
+    latest_file = None
+    latest_time = None
+
+    for file in bike_geojson_path.glob("*.geojson"):
+        modified_time = file.stat().st_mtime
+        if latest_time is None or modified_time > latest_time:
+            latest_time = modified_time
+            latest_file = file
+
+    if latest_file and latest_file.exists():
+        with open(latest_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    else:
+        log("No valid GeoJSON file found.")
+        return {"error": "No data available"}

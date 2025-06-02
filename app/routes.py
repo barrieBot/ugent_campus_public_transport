@@ -1,6 +1,5 @@
 from flask  import Blueprint, render_template, jsonify, request
 from app.utils.data_api_calls import get_bike_data, get_tram_data
-from app.utils.data_fetch_csv import fetch_data
 from app.utils.ors_service import get_route
 
 
