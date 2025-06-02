@@ -1,5 +1,5 @@
-import { apiService } from "./APIService";
-import { LayerManager } from "./LayerManager";
+import { apiService } from "./APIService.js";
+import { LayerManager } from "./LayerManager.js";
 
 export class DataPolling {
 

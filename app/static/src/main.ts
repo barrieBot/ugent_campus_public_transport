@@ -14,10 +14,5 @@ SetupMap()
 const ui_Manager = new UIManager()
 const layer_Manager = new LayerManager(map)
 const pollingService = new DataPolling(layer_Manager)
-
-
-
-const routes_layer = L.geoJSON(null).addTo(map)
-const test_layer = L.geoJSON(null).addTo(map)
-
+pollingService.startPolling()
 

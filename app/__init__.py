@@ -1,5 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 
 # https://pypi.org/project/python-dotenv/
@@ -11,6 +12,7 @@ def make_app():
     #https://flask.palletsprojects.com/en/stable/quickstart/
 
     app = Flask(__name__)
+    CORS(app)
 
     # Env-Import für Flask?
     app.config['orc_api_key'] = os.getenv("orc_api_key")
