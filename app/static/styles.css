@@ -1,0 +1,218 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+}
+
+
+#map { 
+    /*height: 180px;
+    width: 200px;*/
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+ }
+
+.map_nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 64px;
+    background-color: rgba(20, 20, 20, 0.75);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 35px;
+
+    z-index: 100;
+}
+
+.pages_title {
+    font-size: larger;
+}
+
+.nav_links a{
+    color: white;
+
+}
+
+.nav_links:hover{
+    background-color: rgba(42, 42, 42, 0.85);
+}
+
+.nav_links:active{
+    background-color: rgba(62, 62, 62, 1);
+}
+
+
+.control{
+
+    position: fixed;
+    bottom: 35px;
+    right: 35px;
+
+    border-radius: 32px;
+    z-index: 100;
+
+}
+
+.control.button{
+
+    width: 64px;
+    height: 64px;
+    background-color: rgba(20, 20, 20, 0.85);
+    border: solid 4px rgb(0, 0, 0);
+    color: white;
+    align-content: center;
+    text-align: center;
+    font-size: x-large;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    pointer-events: auto;
+
+}
+
+.control.button.active{
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.control.panel{
+    width: 300px;
+    height: 600px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.75);
+    border: solid 4px rgb(0, 0, 0);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+
+.control.panel.active{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+.control.panel .dialog_close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    align-content: center;
+    text-align: center;
+    font-size: x-large;
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 15px;
+}
+
+.control.panel .dialog_close:hover {
+    border: solid 1px black;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+
+.col, .col-1, .col-auto{
+    border: 2px solid rgba(255, 0, 0, 0);
+    align-content: flex;
+}
+
+
+.coordinate_input{
+    background: none;
+    border: none;
+    right: 0;
+    width: 150px;
+}
+
+.coordinate_input.error{
+  border: 2px solid red;
+  color: red
+}
+
+
+
+
+
+.form-check {
+  position: relative;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.form-check-toggle {
+  position: relative;
+  padding-left: 0;
+  line-height: 30px;
+}
+.form-check-toggle input {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 0%;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.form-check-toggle input + span {
+  cursor: pointer;
+  user-select: none;
+  height: 30px;
+  margin-left: 70px;
+  display: block;
+}
+.form-check-toggle input + span:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  height: 30px;
+  width: 50px;
+  background: #FFF;
+  border: solid 1px #eff2f3;
+  transition: background 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  border-radius: 15px;
+}
+.form-check-toggle input + span:after {
+  width: 28px;
+  height: 28px;
+  margin-top: 1px;
+  margin-left: 1px;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  background: #FFF;
+  transition: margin-left 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  text-align: center;
+  font-weight: bold;
+  content: "";
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 0 0 5px rgba(0, 0, 0, 0.05);
+}
+.form-check-toggle input:checked + span:after {
+  content: "";
+  margin-left: 21px;
+  box-shadow: none;
+}
+.form-check-toggle input:checked + span:before {
+  background-color: #86be4e;
+  border-color: #86be4e;
+  transition: background 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
