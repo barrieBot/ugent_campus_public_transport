@@ -20,5 +20,3 @@ def test_make_GeoJson_from_CSV(tmp_path):
     assert geojson_file.exists()
     content = geojson_file.read_text()
     assert "FeatureCollection" in content
-
-    

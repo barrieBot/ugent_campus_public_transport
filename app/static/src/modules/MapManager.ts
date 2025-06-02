@@ -8,7 +8,7 @@ export function SetupMap() {
 
     map = L.map('map', {
         zoomControl: false
-    }).setView([51.05, 3.72], 13);
+    }).setView([51.05, 3.72], 20);
 
 
     L.control.zoom({

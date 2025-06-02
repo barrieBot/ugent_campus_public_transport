@@ -16,10 +16,6 @@ const layers = {
                 //Do something
                 ///Make popup and call function for Route-Service
             })
-            layer.on('hover', () => {
-                //Do something else
-                //Show popup for as long as neccessary
-            })
         }
     }),
     bikes: L.geoJSON(null, {
@@ -46,8 +42,6 @@ export class LayerManager {
         layers.bikes.addTo(map)
 
         _state.onchange(() => {
-            console.log("Bikes vis: " + _state.bikesVisible)
-            console.log("Trams vis: " + _state.tramsVisible)
             this.setVisible('bikes', _state.bikesVisible)
             this.setVisible('trams', _state.tramsVisible)
         })

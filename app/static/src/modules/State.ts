@@ -4,7 +4,7 @@ export class state {
     public tramsVisible = false
     public bikesVisible = false
 
-    public current_pos: [number, number] = [51.05, 3.72]
+    public current_pos: [number, number] = [51.046, 3.727]
     public select_location = false
 
     private listeners: (() => void)[] = []
