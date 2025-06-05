@@ -1,5 +1,8 @@
 import { latLng } from "leaflet"
 import { init_states as _state } from "./State.js"
+import { map, SetupMap } from './MapManager.js';
+import { LayerManager } from './LayerManager.js';
+import { DataPolling } from './DataPoller.js';
 
 export class UIManager {
 
@@ -48,6 +51,16 @@ export class UIManager {
             if (UIManager.lon_coords_input) { UIManager.lon_coords_input.value = _state.current_pos[1].toString() }
 
         })
+
+
+
+        SetupMap()
+        const layer_Manager = new LayerManager(map)
+        const pollingService = new DataPolling(layer_Manager)
+
+        pollingService.startPolling()
+
+
     }
 
     toggle_contr() {
@@ -58,7 +71,7 @@ export class UIManager {
     ping_pos() {
         navigator.geolocation.getCurrentPosition(user_pos => {
             const lat_lon: [number, number] = [user_pos.coords.latitude, user_pos.coords.longitude]
-            
+
             //Here maybe alerts for out of Range_pos
             //Your Position is not within the bounds of the Serviceable location....
 

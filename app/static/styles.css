@@ -143,7 +143,41 @@ body {
 
 
 
+.custom_icon {
+  filter: drop-shadow(2px 2px 3px rgba(141, 141, 141, 0.5));
+}
 
+
+.custom_icon .user_location{
+  width: 30px;
+  height: 70px;
+  background-image: url('resources/marker_user.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.custom_icon .tram_station{
+  width: 30px;
+  height: 84px;
+  background-image: url('resources/marker_tram.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.custom_icon .bike_location{
+  width: 32px;
+  height: 57px;
+  background-image: url('resources/marker_bike.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+
+
+/*
+CSS from Online: 
+
+*/
 
 .form-check {
   position: relative;
@@ -216,3 +250,7 @@ body {
   border-color: #86be4e;
   transition: background 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
+
+
+
+

@@ -30,7 +30,10 @@ export class DataPolling {
             ])
 
             this.layerManager.updateLayer('bikes', bikes)
-            this.layerManager.updateLayer('trams', trams)
+
+            //GeoJson Object not yet correctly formanted .... 
+            
+            //this.layerManager.updateLayer('trams', trams)
 
         } catch (err){
             console.error('Errors while fetching data: ', err)

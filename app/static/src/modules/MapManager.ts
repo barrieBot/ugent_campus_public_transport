@@ -3,6 +3,13 @@ declare const L: typeof import('leaflet')
 
 export let map: L.Map
 let user_pos_on_map: L.Marker | null = null
+const user_icon = L.divIcon({
+    className: 'custom_icon',
+    html: '<div class="user_location"></div>',
+    iconSize: [30, 70],
+    iconAnchor: [15, 70]
+})
+
 
 export function SetupMap() {
 
@@ -25,7 +32,7 @@ export function SetupMap() {
 
 
     map.on('click', (e) => {
-        if(state.select_location){
+        if (state.select_location) {
             const user_pos: [number, number] = [e.latlng.lat, e.latlng.lng]
             state.update(v => {
                 v.select_location = false
@@ -36,8 +43,15 @@ export function SetupMap() {
 }
 
 state.onchange(() => {
-    if(user_pos_on_map){ map.removeLayer(user_pos_on_map) }
+    if (user_pos_on_map) { map.removeLayer(user_pos_on_map) }
     const user_pos = state.current_pos
-    if(user_pos) { user_pos_on_map = L.marker(user_pos, {/* Here you could player an icon or somthing, i think? */}).addTo(map)}
+
+    // https://stackoverflow.com/questions/41590102/change-leaflet-marker-icon
+
+    if (user_pos) {
+        user_pos_on_map = L.marker(user_pos, {icon: user_icon}).addTo(map)
+
+    }
 })
+
 
