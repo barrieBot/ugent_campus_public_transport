@@ -1,6 +1,6 @@
 import { latLng } from "leaflet"
 import { init_states as _state } from "./State.js"
-import { map, SetupMap } from './MapManager.js';
+import { map, SetupMap, center_map } from './MapManager.js';
 import { LayerManager } from './LayerManager.js';
 import { DataPolling } from './DataPoller.js';
 
@@ -13,6 +13,7 @@ export class UIManager {
     static ping_pos_button = document.querySelector('#pinpoint_location_button')
     static set_pos_button = document.querySelector('#set_location_button')
     static set_pos_nav = document.querySelector('#set_location_nav')
+    static center_pos_nav = document.querySelector('#set_map_position')
 
     static lon_coords_input = document.querySelector('#lon_coords') as HTMLInputElement
     static valid_lon: boolean = true
@@ -25,15 +26,26 @@ export class UIManager {
 
     constructor() {
 
+
+        SetupMap()
+        const layer_Manager = new LayerManager(map)
+        const pollingService = new DataPolling(layer_Manager)
+
+        pollingService.startPolling()
+
+
+
         UIManager.open_ContrPanel!.addEventListener('click', this.toggle_contr)
         UIManager.close_ContrPanel!.addEventListener('click', this.toggle_contr)
 
         UIManager.ping_pos_button!.addEventListener('click', this.ping_pos)
         UIManager.set_pos_button!.addEventListener('click', this.set_pos)
         UIManager.set_pos_nav!.addEventListener('click', this.set_pos)
+        UIManager.center_pos_nav!.addEventListener('click', center_map)
 
         UIManager.lon_coords_input!.addEventListener('blur', this.enter_lat_lon)
         UIManager.lat_coords_input!.addEventListener('blur', this.enter_lat_lon)
+
 
         UIManager.trams_vis_check!.addEventListener('change', ({ target }) => {
             _state.update(state => {
@@ -54,11 +66,6 @@ export class UIManager {
 
 
 
-        SetupMap()
-        const layer_Manager = new LayerManager(map)
-        const pollingService = new DataPolling(layer_Manager)
-
-        pollingService.startPolling()
 
 
     }

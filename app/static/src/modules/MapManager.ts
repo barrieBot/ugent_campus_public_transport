@@ -1,3 +1,4 @@
+import { LatLng } from 'leaflet';
 import { init_states as state } from './State.js';
 declare const L: typeof import('leaflet')
 
@@ -15,7 +16,7 @@ export function SetupMap() {
 
     map = L.map('map', {
         zoomControl: false
-    }).setView([51.05, 3.72], 16);
+    }).setView([51.05, 3.72], 14);
 
 
     L.control.zoom({
@@ -24,7 +25,7 @@ export function SetupMap() {
 
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 20,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
@@ -49,9 +50,28 @@ state.onchange(() => {
     // https://stackoverflow.com/questions/41590102/change-leaflet-marker-icon
 
     if (user_pos) {
-        user_pos_on_map = L.marker(user_pos, {icon: user_icon}).addTo(map)
+        user_pos_on_map = L.marker(user_pos, { icon: user_icon }).addTo(map)
 
     }
 })
 
+
+export function center_map() {
+
+    if (state.routeVisible && state.dest_pos) {
+
+        const bounds = L.latLngBounds([state.current_pos, state.dest_pos])
+        map.flyToBounds(bounds, {
+            paddingTopLeft: [50, 50],
+            paddingBottomRight: [60, 100],
+            duration: 1.5
+        })
+
+    } else {
+        map.flyTo(state.current_pos, 14, {
+            duration: 1.5
+        })
+    }
+
+}
 

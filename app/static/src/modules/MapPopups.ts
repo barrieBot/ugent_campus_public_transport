@@ -9,7 +9,7 @@ export function bikePopup(source: GeoJSON.Feature): HTMLElement {
     const text_content =document.createElement('div')
     text_content.innerHTML =  `<h3>Bike: </h3>
         <p>Provider: ${bike_properties.provider  || 'Unknown'}</p>
-        <p>Range: ${bike_properties.range} km</p>`
+        <p>Range: ${ Math.round(bike_properties.range/10) /100 || '-' } km</p>`
 
     popup.appendChild(text_content)
     const get_route_button = get_routing_for_popup(source)
@@ -67,32 +67,35 @@ export function routePopup(source: GeoJSON.Feature): HTMLElement{
 
     const text_content =document.createElement('div')
     text_content.innerHTML =  `<h3>Route</h3>
-        <p>Disance: ${route_properties.summary.distance/1000 +'km' || ' Unknown'}</p>
-        <p>Time: ${route_properties.summary.duration/60 + 'min' || ' Unknown'} </p>`
+        <p>Disance: ${Math.round(route_properties.summary.distance/10) /100 +'km' || ' Unknown'}</p>
+        <p>Time: ${Math.round(route_properties.summary.duration/60) + 'min' || ' Unknown'} </p>`
 
     popup.appendChild(text_content)
 
     ///Button for close route here, maybe
+
+    const delete_route_button = deleteRoute()
+    popup.appendChild(delete_route_button)
+
 
     return popup
 }
 
 
 
-export function deleteRoute(source: GeoJSON.Feature): HTMLButtonElement{
+export function deleteRoute(): HTMLButtonElement{
 
     const button = document.createElement('button')
     button.textContent = 'Delete'
 
 
-    //vehicle_type_id -> Backend scan history -> make csv, make route (ORS) get bike-locations maybe
+    //vehicle_type_id -> Backend scan history -> make csv, make route (ORS) get bike-locations maybe -> No, doesn't work, no unique id
 
     button.classList.add('btn', 'btn-primary')
     button.addEventListener('click', () => {
                 _state.update(v => {
                     v.routeVisible = false
                 })
-        ///Here Function Call for API-GetRoute_for_bike
     })
 
     return button

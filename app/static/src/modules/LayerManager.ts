@@ -1,5 +1,6 @@
 declare const L: typeof import('leaflet')
 import { apiService } from './APIService.js';
+import { center_map } from './MapManager.js';
 import { bikePopup, routePopup, tramPopup } from './MapPopups.js';
 import { init_states as _state } from './State.js';
 
@@ -38,9 +39,9 @@ const layers = {
     }),
     routes: L.geoJSON(null, {
         style: (feature) => ({
-            color: "#FF0000",
-            weight: 5,
-            opacity: 0.5
+            color: "#0F4336",
+            weight: 7,
+            opacity: 1
             // Can I put that into css?
         }),
         onEachFeature: (feature, layer) => {
@@ -92,6 +93,7 @@ export class LayerManager {
             this.routeAPI.getRoute(_state.current_pos, _state.dest_pos)
                 .then(route => this.updateLayer('routes', route))
                 .then(() => this.setVisible('routes', true))
+                .then(() => center_map())
                 .catch((e) => console.log('Error while fetching Route: ', e))
         }
     }

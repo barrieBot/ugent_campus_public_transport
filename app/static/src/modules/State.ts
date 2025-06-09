@@ -1,8 +1,8 @@
 type Listener = () => void;
 
 export class state {
-    public tramsVisible = false
-    public bikesVisible = false
+    public tramsVisible = true
+    public bikesVisible = true
     public routeVisible = false
 
     public current_pos: [number, number] = [51.046, 3.727]
