@@ -146,18 +146,19 @@ def make_GeoJson_from_CSV(csv_file_name: str):
 def get_bikes_from_API_data():
     fetch_data()
     
-    latest_file = None
-    latest_time = None
+    all_bikes = []
 
     for file in bike_geojson_path.glob("*.geojson"):
-        modified_time = file.stat().st_mtime
-        if latest_time is None or modified_time > latest_time:
-            latest_time = modified_time
-            latest_file = file
-
-    if latest_file and latest_file.exists():
-        with open(latest_file, "r", encoding="utf-8") as f:
-            return json.load(f)
+        if file.exists():
+            with open(file, "r", encoding="utf-8") as F:
+                data = json.load(F)
+                if "features" in data:
+                    all_bikes.extend(data["features"])
+    if all_bikes:
+        return {
+            "type": "FeatureCollection",
+            "features": all_bikes
+        }
     else:
         log("No valid GeoJSON file found.")
         return {"error": "No data available"}

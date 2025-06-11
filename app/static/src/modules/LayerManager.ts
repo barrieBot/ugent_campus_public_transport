@@ -12,9 +12,16 @@ const tram_icon = L.divIcon({
     iconAnchor: [15, 84]
 })
 
-const bike_icon = L.divIcon({
+const bike_bolt_icon = L.divIcon({
     className: 'custom_icon',
-    html: '<div class="bike_location"></div>',
+    html: '<div class="bike_location_bolt"></div>',
+    iconSize: [32, 57],
+    iconAnchor: [16, 57]
+})
+
+const bike_dott_icon = L.divIcon({
+    className: 'custom_icon',
+    html: '<div class="bike_location_dott"></div>',
     iconSize: [32, 57],
     iconAnchor: [16, 57]
 })
@@ -30,9 +37,12 @@ const layers = {
         }
     }),
     bikes: L.geoJSON(null, {
-        pointToLayer: (feature, latlon) => L.marker(latlon, {
-            icon: bike_icon
-        }),
+
+        pointToLayer: (feature, latlon) => {
+          const provider = feature.properties.provider
+          const icon = provider === 'bolt' ? bike_bolt_icon : bike_dott_icon
+          return L.marker(latlon, { icon: icon} )
+        },
         onEachFeature: (feature, layer) => {
             layer.bindPopup(L.popup().setContent(bikePopup(feature)))
         },

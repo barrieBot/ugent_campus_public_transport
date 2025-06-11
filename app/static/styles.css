@@ -164,15 +164,21 @@ body {
   background-repeat: no-repeat;
 }
 
-.custom_icon .bike_location{
+.custom_icon .bike_location_dott{
   width: 32px;
   height: 57px;
-  background-image: url('resources/marker_bike.svg');
+  background-image: url('resources/marker_bike_dott.svg');
   background-size: contain;
   background-repeat: no-repeat;
 }
 
-
+.custom_icon .bike_location_bolt{
+  width: 32px;
+  height: 57px;
+  background-image: url('resources/marker_bike_bolt.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 
 /*
 CSS from Online: 
