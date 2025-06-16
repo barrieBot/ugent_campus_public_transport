@@ -25,4 +25,3 @@ def route():
     start = data.get("start")
     end = data.get("end")
     return jsonify(get_route(start, end))
-

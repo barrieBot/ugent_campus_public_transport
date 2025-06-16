@@ -5,7 +5,7 @@ from flask import current_app
 def ors_key():
     return current_app.config['orc_api_key']
 
-# need to fetch key from -> 
+# need to fetch key from ->
 # https://data.delijn.be/product#product=5978abf6e8b4390cc83196ad
 def deljin_key():
     return current_app.config['deljin_key']

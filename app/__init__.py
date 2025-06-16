@@ -1,7 +1,8 @@
+import os
 from flask import Flask
 from dotenv import load_dotenv
 from flask_cors import CORS
-import os
+from .routes import main
 
 # https://pypi.org/project/python-dotenv/
 # https://medium.com/@oadaramola/a-pitfall-i-almost-fell-into-d1d3461b2fb8
@@ -19,7 +20,6 @@ def make_app():
     app.config['deljin_key'] = os.getenv("deljin_key")
 
     # https://flask.palletsprojects.com/en/stable/tutorial/views/
-    from .routes import main
     app.register_blueprint(main)
 
     return app

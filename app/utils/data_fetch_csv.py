@@ -1,11 +1,10 @@
 import os
 import shutil
-import requests
 import csv
 import json
-from collections import OrderedDict
 from datetime import datetime, timedelta
 from pathlib import Path
+import requests
 
 file_old_timeout_in_min = 10
 
@@ -27,7 +26,7 @@ json_urls = {
 }
 
 def log(msg: str):
-    with open(log_file, "a") as file:
+    with open(log_file, "a", encoding="UTF-8") as file:
         file.write(f"{datetime.now(): %Y-%m-%d %H:%M:%S} : {msg}\n")
 
 def ensure_dir_exists():
@@ -63,21 +62,24 @@ def fetch_data():
     for name, url in json_urls.items():
         filename = f"{name}_{timestamp}.geojson"
         path = bike_geojson_path / filename
-        r = requests.get(url)
-        r.raise_for_status()
-        data = r.json()
+        try:
+            r = requests.get(url, timeout=25)
+            r.raise_for_status()
+            data = r.json()
 
-        if "dott" in url:
-            provider = "dott"
-        elif "bolt" in url:
-            provider = "bolt"
-        else:
-            provider = "unknown"
+            if "dott" in url:
+                provider = "dott"
+            elif "bolt" in url:
+                provider = "bolt"
+            else:
+                provider = "unknown"
 
-        print(f"Generating GeoJSON for provider: {provider}")
-        make_GeoJson_from_JSON(data, path, provider)
-        os.chmod(path, 0o444)
-        log(f"{provider.capitalize()} GeoJSON saved to {path}")
+            print(f"Generating GeoJSON for provider: {provider}")
+            make_GeoJson_from_JSON(data, path, provider)
+            os.chmod(path, 0o444)
+            log(f"{provider.capitalize()} GeoJSON saved to {path}")
+        except requests.Timeout:
+            log(f"Timeout: {url}")
 
 def make_GeoJson_from_JSON(api_response, output_path: Path, provider: str):
     features = []
@@ -145,7 +147,7 @@ def make_GeoJson_from_CSV(csv_file_name: str):
 
 def get_bikes_from_API_data():
     fetch_data()
-    
+
     all_bikes = []
 
     for file in bike_geojson_path.glob("*.geojson"):
@@ -159,6 +161,5 @@ def get_bikes_from_API_data():
             "type": "FeatureCollection",
             "features": all_bikes
         }
-    else:
-        log("No valid GeoJSON file found.")
-        return {"error": "No data available"}
+    log("No valid GeoJSON file found.")
+    return {"error": "No data available"}

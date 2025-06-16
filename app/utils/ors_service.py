@@ -1,11 +1,11 @@
-import openrouteservice
+import openrouteservice # type: ignore
 from app.utils.api_key import ors_key
 
-# already have a key - need to make reference to other file 
+# already have a key - need to make reference to other file
 _client = None
 
 def get_client():
-    global _client 
+    global _client
     if _client is None:
         _client = openrouteservice.Client(key = ors_key())
     return _client
