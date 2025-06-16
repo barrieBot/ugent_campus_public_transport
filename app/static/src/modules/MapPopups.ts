@@ -2,7 +2,7 @@ import { init_states as _state} from "./State.js";
 
 
 export function bikePopup(source: GeoJSON.Feature): HTMLElement {
-    const bike_properties = source.properties as any
+    const bike_properties = source.properties as GeoJSON.GeoJsonProperties || {}
 
     const popup = document.createElement('div');
 
@@ -19,14 +19,14 @@ export function bikePopup(source: GeoJSON.Feature): HTMLElement {
 }
 
 export function tramPopup(source:GeoJSON.Feature): HTMLElement{
-    const tram_properties = source.properties as any
+    const tram_properties = source.properties as GeoJSON.GeoJsonProperties || {}
 
     const popup = document.createElement('div');
 
     const text_content =document.createElement('div')
     text_content.innerHTML =  `<h3>Tram</h3>
-        <p><strong>Tram-Station-Nr.: </strong>${tram_properties.haltenummer}</p>
-        <p>${tram_properties.omschrijving}</p>
+        <p><strong>Tram-Station-Nr.: </strong>${tram_properties.haltenummer || ''}</p>
+        <p>${tram_properties.omschrijving || ''}</p>
         <p></p>`
 
     popup.appendChild(text_content)
@@ -61,7 +61,7 @@ export function get_routing_for_popup(source: GeoJSON.Feature): HTMLButtonElemen
 
 
 export function routePopup(source: GeoJSON.Feature): HTMLElement{
-    const  route_properties = source.properties as any
+    const  route_properties = source.properties as GeoJSON.GeoJsonProperties || {}
     const popup = document.createElement('div')
     //add Class here
 

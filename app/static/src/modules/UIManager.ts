@@ -1,4 +1,3 @@
-import { latLng } from "leaflet"
 import { init_states as _state } from "./State.js"
 import { map, SetupMap, center_map } from './MapManager.js';
 import { LayerManager } from './LayerManager.js';

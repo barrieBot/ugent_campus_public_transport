@@ -3,7 +3,7 @@ import { LayerManager } from "./LayerManager.js";
 
 export class DataPolling {
 
-    private Interval_cache: any = null
+    private Interval_cache: number | undefined
 
     constructor(private layerManager: LayerManager){}
 

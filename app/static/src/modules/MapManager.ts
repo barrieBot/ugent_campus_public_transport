@@ -1,4 +1,3 @@
-import { LatLng } from 'leaflet';
 import { init_states as state } from './State.js';
 declare const L: typeof import('leaflet')
 

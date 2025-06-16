@@ -48,7 +48,7 @@ const layers = {
         },
     }),
     routes: L.geoJSON(null, {
-        style: (feature) => ({
+        style: () => ({
             color: "#0F4336",
             weight: 7,
             opacity: 1

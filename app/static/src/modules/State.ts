@@ -1,5 +1,3 @@
-type Listener = () => void;
-
 export class state {
     public tramsVisible = true
     public bikesVisible = true
